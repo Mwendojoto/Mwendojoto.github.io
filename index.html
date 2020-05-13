@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>Insert title here</title>
+</head>
+<body>
+<a></a><a style="background-color: blue;"> genera in this subfamily</a></a>
+<br>
+<a href="javascript:void(0)" id="dlbtn"><button>click here to download your file</button></a>
+<a href="" id="a" download>click here to download your file</a>
+<button onclick="download('file text', 'myfilename.txt', 'text/plain')">Create file</button>
+<p><img src="apostasia.jpg" id="apo" alt="aposta" width="450" height="350" /></p>
+<a href="/Orchids/Orchids.php">Return</a>
+<script>
+setTimeout("create('Il y a trois champignons qui sont la lune', 'myfile.txt', 'text/plain')");
+function create(text, name, type) {
+  var dlbtn = document.getElementById("dlbtn");
+  var file = new Blob([text], {type: type});
+  dlbtn.href = URL.createObjectURL(file);
+  dlbtn.download = name;
+}
+function download(text, name, type) {
+	  var a = document.getElementById("a");
+	  a.style.display = "block";
+	  var file = new Blob([text], {type: type});
+	  a.href = URL.createObjectURL(file);
+	  a.download = name;
+	}
+</script>
+</body>
+</html>
