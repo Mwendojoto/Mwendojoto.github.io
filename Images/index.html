@@ -1,1 +1,463 @@
-Alison Wheeler
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>Carré</title>
+</head>
+<body>
+<div>Choisir un fichier: <input type="file" id="fileInput"></div>
+Nombre de lignes: 
+<select id=blocks onchange="updateSize()">
+                        <option>12</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>12</option>
+                        <option>16</option>
+                        <option>18</option>
+						<option>24</option>                        
+						<option>32</option>
+						<option>36</option>
+						<option>48</option>				
+</select>
+Nombre de colonnes: 
+<select id=nBlocks onchange="updateNBlocks()">
+                        <option>12</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>9</option>
+                        <option>12</option>
+                        <option>16</option>
+                        <option>18</option>
+						<option>24</option>                        
+						<option>32</option>
+						<option>36</option>
+						<option>48</option>
+</select>
+<br>
+Joker:
+<input type="radio" id="r0" name="mode" value="Back" checked="checked"> ←
+<input type="radio" id="r1" name="mode" value="Forward"> →
+<input type="radio" id="r2" name="mode" value="Double"> ⇄
+<div>
+<button onclick="stir()"><font size=6><b>←</b></font>
+<button onclick="stir()"><font size=6><b>→</b></font>
+<button onclick="stir()"><font size=10><b>↻</b></font></button>
+</div>
+<canvas id="mySquare" width="576" height="576" style="border:1px solid #a3b3c3;">
+</canvas>
+<canvas id="myCanvas" width="576" height="576" style="border:1px solid #a3b3c3;">
+</canvas>
+
+<script>
+
+fileInput.addEventListener('change', function(e) {
+	  var preview = document.querySelector('#preview');
+	  var files   = document.querySelector('input[type=file]').files;
+
+	  function readAndPreview(file) {
+
+	    // Veillez à ce que `file.name` corresponde à nos critères d’extension
+	    if ( /\.(jpe?g|png|gif)$/i.test(file.name) ) {
+	      var reader = new FileReader();
+
+	      reader.addEventListener("load", function () {
+	        //var image = new Image();
+	        //image.height = 500;
+	        //image.title = file.name;
+	        img.src = this.result;
+	        img.onload();
+	      }, false);
+
+	      reader.readAsDataURL(file);
+	    }
+
+	  }
+
+	  if (files) {
+	    [].forEach.call(files, readAndPreview);
+	  }
+});
+
+var r0=document.getElementById("r0");
+var r1=document.getElementById("r1");
+var r2=document.getElementById("r2");
+
+r0.addEventListener('change', function(e){
+	if (r0.checked){
+			mode=0;
+		}
+	});
+		
+r1.addEventListener('change', function(e){
+	if (r1.checked){
+			mode=1;
+		}
+	});
+		
+r2.addEventListener('change', function(e){
+	if (r2.checked){
+			mode=2;
+		}
+	});
+
+function clip(array, i)
+{
+	var buff=array;
+	var pivot=buff[i];
+	first=buff.slice(0,i);
+	buff=first.concat(buff.slice(i+1));
+		
+	for (j=0; j<buff.length; j++)
+		{
+			if (buff[j]>pivot)
+				buff[j]-=1;
+		}
+			
+	return buff;
+}
+
+function invert(array)
+
+{
+	result=[];
+	
+	for (i=0; i<array.length; i++)
+		{
+			result.push(0);
+		}
+	for (i=0; i<array.length; i++)
+		{
+			result[array[i]]=i;
+		}
+	
+	return result;
+}
+
+function shift(array,i,j) {
+
+	var result;
+	
+	if (i<j)
+	{
+		var first=array.slice(0,i+1);
+		first.push(array[j]);
+		var second=array.slice(i+1,j);
+		var tail=array.slice(j+1);
+		var temp=first.concat(second);
+		result=temp.concat(tail);
+	}
+
+	else {
+		var first=array.slice(0,j);
+		var second=array.slice(j+1,i);
+		var temp=first.concat(second);
+		temp.push(array[j]);
+		var tail=array.slice(i);
+		result=temp.concat(tail);
+	}
+	
+	return result;
+}
+
+var permutations, inverse, squares, quad = [], support, nRows=12, nColumns=12, largeur = 576, hauteur = 576, rep = 0, nBlocks = 1, dX, dY, mode=0;
+var side=Math.floor(hauteur/nRows), dise=Math.floor(largeur/nColumns);
+charge();
+var img = new Image(), image=new Image();
+img.src = 'BV.png';
+var canvas = document.getElementById('myCanvas');
+var elem = document.getElementById('mySquare');
+var ctx = canvas.getContext('2d');
+var context = elem.getContext('2d');
+var A=elem.offsetLeft, B=elem.offsetTop;
+var viewportOffset = elem.getBoundingClientRect();
+//these are relative to the viewport, i.e. the window
+var top = viewportOffset.top;
+var left = viewportOffset.left;
+
+function findPos(node) {    
+    var curtop = 0;
+    var curtopscroll = 0;
+    if (node.offsetParent) {
+        do {
+            curtop += node.offsetTop;
+            curtopscroll += node.offsetParent ? node.offsetParent.scrollTop : 0;
+        } while (node == node.offsetParent);
+
+        alert(curtop - curtopscroll);
+    }
+}
+
+elem.addEventListener("mousedown",function(event)
+		{
+			//alert(event.clientX+" "+event.clientY);
+			dX=Math.floor((event.clientX+window.scrollX-A)/dise);
+			dY=Math.floor((event.clientY+window.scrollY-B)/side);
+		});
+		
+elem.addEventListener("mouseup",function(event)
+		{
+			//alert(event.clientY+" "+window.scrollY);
+			var x=Math.floor((event.clientX+window.scrollX-A)/dise);
+			var y=Math.floor((event.clientY+window.scrollY-B)/side);
+			/*var x=Math.floor((event.clientX)/dise);
+			var y=Math.floor((event.clientY-128)/side);*/
+			var i1=dY*nColumns+dX, i2=y*nColumns+x, t1=permutations[i1], t2=permutations[i2];
+			if (i1==i2)
+				{
+					if (mode<2)
+					{
+						if (mode==0){
+							i2=inverse[i1];
+							t2=i1;
+						}
+						
+						else
+						{
+							i2=permutations[i1];
+							t2=permutations[i2];
+						}
+						
+						permutations[i1]=t2;
+						permutations[i2]=t1;
+						inverse[t1]=i2;
+						inverse[t2]=i1;			
+					}
+					
+					else
+					{
+						i2=permutations[i1];
+						var i3=inverse[i1];
+						permutations[i3]=permutations[i2];
+						inverse[permutations[i2]]=i3;
+						
+						//i2=permutations[i1];
+						//var i3=inverse[i2];
+						//permutations[i3]=t1;
+						//inverse[t1]=i3;
+						
+						permutations[i1]=i1;
+						permutations[i2]=i2;
+						inverse[i1]=i1;
+						inverse[i2]=i2;
+						//permutations[i2]=inverse[i1];
+					}
+				}
+			
+			else {				
+				permutations[i1]=t2;
+				permutations[i2]=t1;
+				inverse[t1]=i2;
+				inverse[t2]=i1;			
+			}
+
+			//permutations=shift(permutations, i1, i2);
+			img.onload();
+		});
+
+var blockSize=document.getElementById('blocks');
+var numBlocks=document.getElementById('nBlocks');
+
+function updateSize()
+	{
+	    var r = parseInt(blockSize.value);
+	    nRows = r;
+	    side=Math.floor(hauteur/nRows);
+	}
+	
+function updateNBlocks()
+	{
+	    var r = parseInt(numBlocks.value);
+	    nColumns = r;
+	    dise=Math.floor(largeur/nColumns);
+	}
+	
+function stir()
+	{
+		charge();	
+		img.onload();
+	}
+
+function charge() {
+	
+	permutations = [], inverse = [], squares = [], quadrati = [], quad = [], support = [];
+	var L=0;
+
+	while (L<nRows)
+		{
+		
+		var H=0;
+		
+		while (H<nColumns)
+			{
+				var line=[H, L, 1, 1], nile=[H, L];
+				squares.push(line);
+				quadrati.push(nile);
+				H++;		
+			}
+		
+			L++;
+		}
+	
+	var m=squares.length-1;
+	
+	for (var i=0; i<squares.length; i++)
+		permutations.push(i);
+	
+	for (var i=0; i<squares.length; i++)
+		{
+			var temp=permutations[m];
+			var randomIndex=Math.floor(Math.random()*m);
+			permutations[m]=permutations[randomIndex];
+			permutations[randomIndex]=temp;
+			m--;
+		}
+	
+	//permutations=[1,3,2,0];
+		
+	inverse=invert(permutations);
+	
+	for (var i=0; i<squares.length; i++)
+		{
+			if (permutations[i]!=i)
+				support.push(i);	
+		}	
+}
+
+img.onload = function() {
+    
+  //alert(rep);
+  
+  rep++;
+    
+  ctx.drawImage(img, 0, 0);
+  
+  context.clearRect(0, 0, 2*largeur, hauteur);
+    	
+  for (var i=0; i<squares.length; i++)
+	  
+		context.drawImage(img, squares[permutations[i]][0]*dise, squares[permutations[i]][1]*side, squares[i][2]*dise, squares[i][3]*side, quadrati[i][0]*dise, quadrati[i][1]*side, squares[i][2]*dise, squares[i][3]*side);
+		//context.drawImage(img, squares[i][0]*side, squares[i][1]*side, squares[i][2]*side, squares[i][3]*side, quadrati[permutations[i]][0]*side, quadrati[permutations[i]][1]*side, squares[i][2]*side, squares[i][3]*side);
+		//context.drawImage(img, squares[i][0]*side, squares[i][1]*side, squares[i][2]*side, squares[i][3]*side, quadrati[i][0]*side, quadrati[i][1]*side, squares[permutations[i]][2]*side, squares[permutations[i]][3]*side);
+
+	  
+  img.style.display = 'none';
+};
+
+image.onload = function() {
+    
+	  //alert(rep);
+	  
+	  rep++;
+	    
+	  ctx.drawImage(imageg, 0, 0);
+	  
+	  context.clearRect(0, 0, 2*largeur, hauteur);
+	    	
+	  for (var i=0; i<squares.length; i++)
+		  
+			context.drawImage(image, squares[permutations[i]][0]*side, squares[permutations[i]][1]*side, squares[i][2]*side, squares[i][3]*side, quadrati[i][0]*side, quadrati[i][1]*side, squares[i][2]*side, squares[i][3]*side);
+			//context.drawImage(img, squares[i][0]*side, squares[i][1]*side, squares[i][2]*side, squares[i][3]*side, quadrati[permutations[i]][0]*side, quadrati[permutations[i]][1]*side, squares[i][2]*side, squares[i][3]*side);
+			//context.drawImage(img, squares[i][0]*side, squares[i][1]*side, squares[i][2]*side, squares[i][3]*side, quadrati[i][0]*side, quadrati[i][1]*side, squares[permutations[i]][2]*side, squares[permutations[i]][3]*side);
+
+		  
+	  image.style.display = 'none';
+	};
+
+/*var d = ctx.getImageData(0, 0, 50, 50);
+var mgi = new Image();
+mgi.src = d;
+
+var context = elem.getContext('2d');
+context.drawImage(img, 0, 0, 50, 50, 0, 0, 50, 50);
+img.style.display = 'none';*/
+
+function outPut()
+{
+	m=support.length-1;
+	  
+	  for (var i=0; i<nBlocks; i++)
+		 {
+		  var auBol=Math.floor(Math.random()*m);
+		  var randomIndex=support[auBol];
+		  var temp1=permutations[randomIndex], temp2=inverse[randomIndex];
+		  //alert('permutation: '+permutations+' rI: '+randomIndex+' t1: '+temp1+" t2: "+temp2);
+		  permutations[randomIndex]=randomIndex;
+		  permutations[temp2]=temp1;
+		  inverse[randomIndex]=randomIndex;
+		  inverse[temp1]=temp2;
+		  var first=support.slice(0,auBol), second=support.slice(auBol+1);
+		  support=first.concat(second);
+		  m--;
+		 }
+	  
+	  //alert(permutations);
+	  img.onload();
+}
+
+/*function outPut()
+{
+	m=squares.length-1;
+	  
+	  for (var i=0; i<nBlocks; i++)
+		 {
+		  var auBol=Math.floor(Math.random()*m);
+		  var mmoja, mbili;
+
+		  if (squares[auBol][0]<nColumns)
+			  {
+			  	if ((auBol<m-1)&&(squares[auBol][1]==squares[auBol+1][1]))			  
+		  				mmoja=auBol;
+			  	else if ((auBol>0)&&(squares[auBol][1]==squares[auBol-1][1]))
+			  			mmoja=auBol-1;
+				squares[mmoja][2]+=squares[mmoja+1][2];
+				var first=squares.slice(0,mmoja+1), second=squares.slice(mmoja+2);
+				squares=first.concat(second);
+			  	mbili=permutations[mmoja];
+			  	//alert('mbili '+mbili);
+			  	//img.onload;
+			  	var k=quadrati[mbili][1], l=mbili, shift=squares[mmoja+1][2];
+			  	while (k==quadrati[l][1])
+			  		{			  	
+						quadrati[l][0]+=shift;
+						l++;
+					  	//img.onload;
+			  		}
+				//quadrati[mbili][2]+=squares[mmoja+1][2];
+				first=quadrati.slice(0,mbili+1), second=quadrati.slice(mbili+2);
+				quadrati=first.concat(second);
+			  	permutations=clip(permutations,mbili);
+			  	//img.onload;
+			  }
+		  
+		  m--;
+		  var first=squares.slice(0,auBol+1), second=squares.slice(auBol+2);
+		  squares=first.concat(second);		
+		  
+		  var randomIndex=support[auBol];
+		  var temp1=permutations[randomIndex], temp2=inverse[randomIndex];
+		  //alert('permutation: '+permutations+' rI: '+randomIndex+' t1: '+temp1+" t2: "+temp2);
+		  permutations[randomIndex]=randomIndex;
+		  permutations[temp2]=temp1;
+		  inverse[randomIndex]=randomIndex;
+		  inverse[temp1]=temp2;
+		  var first=support.slice(0,auBol), second=support.slice(auBol+1);
+		  support=first.concat(second);
+		  m--;
+		 }
+	  
+	  //alert(permutations);
+
+	  img.onload();
+}*/
+
+</script>
+
+</body>
+</html>
