@@ -1,5 +1,16 @@
 <!DOCTYPE html>
 <html>
+<style>
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+</style>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
 <title>Carré</title>
@@ -50,7 +61,7 @@ Joker:
 <button onclick="stir()"><font size=6><b>→</b></font>
 <button onclick="stir()"><font size=10><b>↻</b></font></button>
 </div>
-<canvas id="mySquare" width="576" height="576" style="border:1px solid #a3b3c3;">
+<canvas id="mySquare" class="noselect" width="576" height="576" style="border:1px solid #a3b3c3;">
 </canvas>
 <canvas id="myCanvas" width="576" height="576" style="border:1px solid #a3b3c3;">
 </canvas>
