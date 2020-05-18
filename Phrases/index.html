@@ -1,1 +1,635 @@
-Olsobip
+<!DOCTYPE html>
+<script src="Koluyeb.js" charset="utf-8"></script>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Phrases</title>
+<style>
+
+body {
+  background: #2A1845;
+} 
+
+div.header {
+  position: relative;
+  top: 20px;
+  display:block;
+  width: 92%;
+  height: auto;
+  border: 3px solid #0033cc;
+  background: #336699;
+} 
+
+div.gauche {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: auto;
+  padding: 10px;
+  height: auto;
+  border: 3px solid #a4a3a2;
+  background: #c1d4dc;
+}
+
+div.centre {
+  position: relative;
+  margin: auto;
+  width: 170px;
+  border: 3px solid #73AD21;
+  padding: 20px;
+  height: auto;
+  border: 4px solid #fbca93;
+  background: #d6fff8;
+}
+
+div.droite {
+  position: fixed;
+  top: 20px;
+  right: 40px;
+  width: auto;
+  padding: 20px;
+  height: auto;
+  border: 3px solid #96e5f3;
+  background: #c1d4dc;
+}
+
+.header {
+          position: absolute;
+		  width: 75%;
+		  padding: 20px;
+		  height: auto;
+		  border: 3px solid #73AD21;
+		  display: flex;
+          flex-direction: column;
+        }
+.but {background-color: #008CBA;}
+.ton {background-color: #008CBA; color: black;}
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+</style>
+<style type="text/css">
+    .fieldset-auto-width {
+         display: inline-block;
+    }
+</style>
+</head>
+<body>
+<br></br>
+
+<div class="header"><font size="4">
+
+	<div id="board" class="gauche">
+		 <div><input type="file" id="fileInput"><button onclick="makeText()">Lancer</button></div>
+	<div id="vues">
+	Vue:
+	  <input type="radio" id="v0" name="vues" value="Simultanée" checked="checked"> Simultanée
+	  <input type="radio" id="v1" name="vues" value="Alternée"> Alternée
+	<br>
+	</div>
+		Langues:
+		<select id=tokPles onchange="updateTP()">
+			<option>1</option>
+			<option>2</option>
+			<option>3</option>
+		</select>
+	  <br>
+	  	Phrases par page:
+		<select id=phP onchange="updatePhP()">
+			<option>1</option>
+			<option>2</option>
+			<option>3</option>
+			<option>4</option>
+			<option>5</option>
+		</select>
+ 	</div>
+
+	<div id="parameters" class="droite">
+		<div id="permutations">
+			Permutation:
+		  	<input type="radio" id="r0" name="mode" value="Oui" checked="checked"> Oui
+		  	<input type="radio" id="r1" name="mode" value="Non"> Non
+			<br>
+		</div>
+		<div id="blocs">
+			Blocs:
+			<input type="radio" id="b0" name="blocs" value="Oui" checked="checked"> Oui
+			<input type="radio" id="b1" name="blocs" value="Non"> Non
+			<br>
+		</div>
+		Mots manquants: 
+		<select id=vide onchange="updateVoid()">
+			<option>0</option>
+			<option>1/8</option>
+			<option>1/5</option>
+			<option>1/4</option>
+    		<option>1/3</option>
+    		<option>1/2</option>
+    		<option>3/4</option>
+		</select>
+		<br>
+		Mots fragmentés: 
+		<select id=bruk onchange="updateBruk()">
+			<option>0</option>
+			<option>1/8</option>
+			<option>1/5</option>
+			<option>1/4</option>
+			<option>1/3</option>
+			<option>1/2</option>
+		</select>
+ </div>
+ 
+ <div id="stick" class="centre">
+  <div id="pC">Page 0/0</div>
+  <br>
+  <button id="newBtn" style="font-size:26px; width:50px" onclick="brasse(-1)">←</button>
+  <button id="reSet" style="font-size:26px;" onclick="brasse(0)">↻</button>
+  <button id="newBtn" style="font-size:26px; width:50px" onclick="brasse(1)">→</button>
+ </div> 
+<div id="contents">
+	<div id="ctrl0"><button id="mnBtn0" style="font-size:12px;" onclick="hide(1)">-</button></div>
+	<div id="upper"  width="auto" style="position: relative; font-size:22px; background: #e0f0ff; height: auto; max-width:75%; border: 1px solid rgb(255,84,104); padding: 20px; margin: 20px;">
+	</div>
+	<div id="ctrl1"><button id="mnBtn1" style="position: relative; font-size:12px;" onclick="hide(2)">-</button></div>
+	<div id="lower"  width="auto" class="noselect" oncontextmenu="return false;" style="position: relative; line-height:36px; font-size:22px; background: #99ccff; height: auto; max-width:75%; border: 1px solid rgb(255,84,104); padding: 20px; margin: 20px;">
+	</div>
+</div></font>
+</div>
+<script>
+
+//var a=['Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu.', 'En archí ín o lógos, kaí o lógos ín prós tón theón, kaí theós ín o lógos.', 'Ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν θεόν, καὶ θεὸς ἦν ὁ λόγος.'];
+
+//elements d'affichage et leur contrôle
+var fileInput = document.getElementById('fileInput'),
+fileDisplayArea = document.getElementById('upper'),
+fileControlArea = document.getElementById('ctrl0'),
+mainDisplayArea = document.getElementById('lower'),
+mainControlArea = document.getElementById('ctrl1'),
+pagesDisplayArea = document.getElementById('pC');
+
+var pageInput = '<input type=\"text\" id=\"pn\" style=\"font-size:20px;\" name=\"name\" required   size=\"4\">';
+var pageButton = '<button id=\"pnBtn\" style=\"font-size:22px;\" onclick=\"goToPage()\">▶</button>';
+
+
+//boutons radio
+var stir=true, blocs=true, views=true;
+
+var r0=document.getElementById("r0");
+r0.addEventListener('change', function(e){
+	if (r0.checked){
+		stir=true;
+		}
+	});
+	
+var r1=document.getElementById("r1");
+r1.addEventListener('change', function(e){
+	if (r1.checked){
+		stir=false;
+		}
+	});
+	
+var b0=document.getElementById("b0");
+b0.addEventListener('change', function(e){
+	if (b0.checked){
+		blocs=true;
+		}
+	});
+	
+var b1=document.getElementById("b1");
+b1.addEventListener('change', function(e){
+	if (b1.checked){
+		blocs=false;
+		}
+	});
+	
+var v0=document.getElementById("v0");
+v0.addEventListener('change', function(e){
+	if (v0.checked){
+		views=true;
+		}
+	});
+	
+var v1=document.getElementById("v1");
+v1.addEventListener('change', function(e){
+	if (v1.checked){
+		views=false;
+		}
+	});
+	
+//listes déroulantes
+var vide=0, frags=0, nL=1;
+
+var proportion = document.getElementById("vide");
+updateVoid = function() {
+    var r = proportion.value;
+    var secondPos=r.indexOf('/');
+    if (secondPos>-1){
+		var p=parseInt(r.slice(0,secondPos));
+		var q=parseInt(r.slice(secondPos+1));
+		vide = p/q;
+    }    
+    else vide=0;
+}
+
+var fragmented = document.getElementById("bruk");
+updateBruk = function() {
+    var r = fragmented.value;
+    var secondPos=r.indexOf('/');
+    if (secondPos>-1){
+		var p=parseInt(r.slice(0,secondPos));
+		var q=parseInt(r.slice(secondPos+1));
+		frags = p/q;
+    }    
+    else frags = 0;
+}
+
+var languages = document.getElementById("tokPles");
+updateTP = function() {
+    nL = languages.value;
+}
+	
+//gestion des zones d'affichage
+function plusButton(n) {
+	var result = '<button id=\"plBtn'+n+'\" style=\"font-size:12px;\" onclick=\"show('+n+')\">+</button>';
+	return result;
+	}
+	
+function minusButton(n) {
+	var result = '<button id=\"mnBtn'+n+'\" style=\"font-size:12px;\" onclick=\"hide('+n+')\">-</button>';
+	return result;
+	}
+	
+function show(n) {
+	if (n==1)
+		{
+			fileDisplayArea.style.display='block';
+			fileControlArea.innerHTML = minusButton(1);
+		}
+	else
+		{
+			mainDisplayArea.style.display='block';
+			mainControlArea.innerHTML = minusButton(2);
+		}
+	
+	var x=(n+1)%2;
+	if (!views)
+		hide(x);
+}
+
+function hide(n) {
+	if (n==1)
+		{
+			fileDisplayArea.style.display='none';
+			fileControlArea.innerHTML = plusButton(1);
+		}
+	else
+		{
+			mainDisplayArea.style.display='none';
+			mainControlArea.innerHTML = plusButton(2);
+		}
+}
+
+//gestion de l'affichage supérieur
+
+var permutation=[0,1,2], one, two, selection=0, compte=0;
+
+function showLine(n){
+	selection-=1<<n;
+	countLines();			
+	layOut();
+}
+
+function hideLine(n){
+	var mask=1<<n;
+	if (selection+mask<7)
+		{
+			selection+=1<<n;
+			countLines();			
+			layOut();
+		}
+}
+
+function mDo(i)
+{
+	if (compte<2){
+		one=i;		
+		var name="line"+i;
+		document.getElementById(name).style.color='blue';
+	}
+}
+
+function mUp(i)
+{
+	if (compte<2){
+		
+		two=i;		
+		var name="line"+i;			
+		document.getElementById(name).style.color='black';
+			
+		if ((two>-1)&&(two>-1)&&(one!=two))
+		{
+			var temp=permutation[one];
+			permutation[one]=permutation[two];
+			permutation[two]=temp;
+			layOut();		
+		}
+		
+		one=-1;
+	}
+}
+
+function mEn(i)
+{
+	if (compte<2){
+		var name="line"+i;
+		
+		if ((one>-1)&&(i!=one))
+		{
+			two=i;
+			document.getElementById(name).style.color='orange';
+		}
+	}
+}
+
+function mLe(i)
+{
+	var name="line"+i;	
+	if (i!=one)
+		document.getElementById(name).style.color='black';
+}
+
+function mCl()
+{
+	var name="line"+one;
+	document.getElementById(name).style.color='black';
+	one=-1;
+}
+
+function countLines(){
+	var result = selection.toString(2);
+	var count = result.split(1);
+	compte=result.split('1').length-1;
+}
+
+//gestion de l'affichage inférieur
+
+var un, deux, current;
+
+function mD(i)
+{
+	un=i;
+	var name="bloc"+i;
+	document.getElementById(name).style.color='blue';
+}
+
+function mU(i)
+{
+	deux=i;
+	
+	var name="bloc"+i;
+		
+	document.getElementById(name).style.color='black';
+		
+	if ((un>-1)&&(deux>-1)&&(un!=deux))
+	{
+		if (current.match(un,deux)<1)
+			current.swap(un,deux);
+		current.save=true;
+		current.upDate();
+	}
+	
+	un=-1;
+}
+
+function mE(i)
+{
+	var name="bloc"+i;
+	
+	if ((un>-1)&&(i!=un))
+	{
+		deux=i;
+		document.getElementById(name).style.color='orange';
+	}
+}
+
+function mL(i)
+{
+	var name="bloc"+i;
+	
+	if (i!=un)
+		document.getElementById(name).style.color='black';
+}
+
+function mClear()
+{
+	if (un>-1){
+		var one="bloc"+un, two="bloc"+deux;
+		document.getElementById(one).style.color='black';
+		document.getElementById(one).style.color='black';
+		un=-1;
+	}
+}
+
+function expand(n)
+{
+	current.display.innerHTML=current.toHTML(n);
+		
+	//contrôle de la fenêtre nouvellement ouverte
+	var pt=document.getElementById('inpoot');
+	
+	pt.focus();
+	
+	pt.addEventListener("keyup", function(event) {
+		  if (event.keyCode === 13) {
+		   event.preventDefault();
+		   document.getElementById("myBtn").click();
+		  }
+		});
+}
+
+function shrink(n)
+{
+	current.display.innerHTML=current.toHTML(-1);
+}
+
+function psefisato(n)
+{
+	var point=document.getElementById('inpoot');
+	
+	if (current.incorporate(n,point.value))
+		current.upDate();
+}
+
+function layOut(){
+	var a=source[namba], phrase=a[0];
+	pagesDisplayArea.innerHTML='Page '+(namba+1)+'/'+source.length;
+	
+	if (nL>1){
+		var buttons='', txt='', bin=1;
+		for (var i=0; i<nL; i++)
+			{
+				var infix="";
+				if ((selection&bin)>0)	
+						buttons+='<button id=\"lineBtn'+i+'\" style=\"font-size:12px;\" onclick=\"showLine('+i+')\">+</button>';
+				else
+					{
+						buttons+='<button id=\"lineBtn'+i+'\" style=\"font-size:12px;\" onclick=\"hideLine('+i+')\">-</button>';
+						
+						infix="<a id=\"line"+i+"\" onmousedown=\"mDo("+i+")\" onmouseup=\"mUp("+i+")\" onmouseenter=\"mEn("+i+")\" onmouseleave=\"mLe("+i+")\">"+a[permutation[i]]+"</a><br>";	
+					}
+				txt+=infix;
+				bin=bin<<1;
+			}		
+
+		if (compte<2)
+			fileDisplayArea.innerHTML=buttons+"<div style=\"font-size:6px;\"><br></br></div><div class=\"noselect\" onmouseleave=mCl()>"+txt+"</div>";
+		else
+			fileDisplayArea.innerHTML=buttons+"<div style=\"font-size:6px;\"><br></br></div><div onmouseleave=mCl()>"+txt+"</div>";
+	}
+	
+	else
+	
+		fileDisplayArea.innerHTML=phrase;
+	
+	current=text[namba];
+	
+	//if ((current.save==false)||(n==0))
+	if (current.save==false)
+	{
+		current=makePhrase(phrase,false);
+		//alert(current.toText());
+		text[namba]=current;
+	}
+	
+	current.upDate();	
+}
+
+function makePhrase(phrase,save)
+{
+	result=new Phrase(phrase,mainDisplayArea,vide,stir,blocs,frags,save);	
+	return result;
+}
+
+function brasse(n){
+	if (n!=0)
+		namba=(source.length+namba+n)%source.length;
+	else
+		namba=Math.floor(Math.random()*source.length);
+			
+	layOut();
+}
+
+function back(){
+	current.previous();
+}
+
+function reSet(){
+	var phrase=source[namba][0];
+	current=makePhrase(phrase,false);
+	text[namba]=current;
+	current.upDate();
+}
+
+function display(){
+	
+	if (nL>1){
+		var buttons='', text='', bin=1;
+		for (var i=0; i<nL; i++)
+			{
+				var infix="";
+				if ((selection&bin)>0)	
+						buttons+='<button id=\"lineBtn'+i+'\" style=\"font-size:12px;\" onclick=\"showLine('+i+')\">+</button>';
+				else
+					{
+						buttons+='<button id=\"lineBtn'+i+'\" style=\"font-size:12px;\" onclick=\"hideLine('+i+')\">-</button>';
+						
+						infix="<a id=\"line"+i+"\" onmousedown=\"mDo("+i+")\" onmouseup=\"mUp("+i+")\" onmouseenter=\"mEn("+i+")\" onmouseleave=\"mLe("+i+")\">"+a[permutation[i]]+"</a><br>";	
+					}
+				text+=infix;
+				bin=bin<<1;
+			}		
+
+		if (compte<2)
+			fileDisplayArea.innerHTML=buttons+"<div style=\"font-size:6px;\"><br></br></div><div class=\"noselect\" onmouseleave=mCl()>"+text+"</div>";
+		else
+			fileDisplayArea.innerHTML=buttons+"<div style=\"font-size:6px;\"><br></br></div><div onmouseleave=mCl()>"+text+"</div>";
+	}
+	
+	else
+	
+		fileDisplayArea.innerHTML=a[0];
+		
+	mainDisplayArea.innerHTML=a[0];
+	
+}
+
+//display();
+
+
+//importation de fichier
+
+var text, lines, source, namba;
+
+fileInput.addEventListener('change', function(e) {
+
+	var file = fileInput.files[0];
+	var textType = /text.*/;
+
+	if (file.type.match(textType)) {
+		var reader = new FileReader();
+
+		reader.onload = function(e) {			
+				text=[];
+				lines=[];
+				namba=0;
+				var dictionary = reader.result;
+				var j=0, firstPos=1;
+				
+			while (firstPos>0)
+				{
+					var firstPos=dictionary.indexOf('\n');
+					var line=dictionary.slice(0,firstPos);
+					lines.push(line);
+					text.push(makePhrase('Trois champignons',false));
+					dictionary=dictionary.slice(firstPos+1);
+					j++;
+				}
+		}
+
+	reader.readAsText(file);
+} 
+	
+	else {
+		fileDisplayArea.innerText = "File not supported!"
+	}
+});
+
+function makeText(){
+	
+	var column=[], n=lines.length, k=0;
+	source=[];
+	for (var j=0; j<n; j++){
+			var line=lines[j];
+			if (((nL==1)||(j%nL==0))&&(j>0))
+			{
+				source.push(column);
+				text.push(makePhrase('Trois champignons',false));
+				column=[];
+				k++;
+			}
+			column.push(line);
+		}
+			
+	layOut();
+}
+
+</script>
+</body>
+</html>
