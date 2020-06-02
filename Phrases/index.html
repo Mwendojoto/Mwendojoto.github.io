@@ -165,7 +165,25 @@ div.droite {
 <script>
 
 //var a=['Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu.', 'En archí ín o lógos, kaí o lógos ín prós tón theón, kaí theós ín o lógos.', 'Ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν θεόν, καὶ θεὸς ἦν ὁ λόγος.'];
+var file = new File([""], "Bateau ivre.txt");
+var reader = new FileReader();
 
+reader.onload = function(e) {
+				var dictionary = reader.result;
+				var j=0, firstPos=1;
+				alert(dictionary);
+				
+		while (firstPos>0)
+				{
+					alert(j);
+					var firstPos=dictionary.indexOf('\n');
+					var line=dictionary.slice(0,firstPos);
+					dictionary=dictionary.slice(firstPos+1);
+					j++;
+				}
+		}
+
+reader.readAsText(file);
 //elements d'affichage et leur contrôle
 var fileInput = document.getElementById('fileInput'),
 fileDisplayArea = document.getElementById('upper'),
