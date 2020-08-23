@@ -541,24 +541,6 @@ function Phrase(phrase, champ, vide, stir, blocs, frags, save) //construit un di
 						else if (t==2)
 							infix="<a style=\"background-color:#9999ff\""+infix;						
 							
-						/*else
-						{
-							if (j%2==1)
-								infix="<a style=\"background-color:#E0E0E0\""+infix;
-							else
-								infix="<a style=\"background-color:#C0C0C0\""+infix;
-						}
-							
-						else 
-							
-						{	
-							if (j%3==2)						
-								infix="<a style=\"background-color:#D0D0E0\""+infix;
-							else if (j%3==1)
-								infix="<a style=\"background-color:#E0D0D0\""+infix;
-							else
-								infix="<a style=\"background-color:#D0E0D0\""+infix;
-						}*/
 						else 
 						
 						{	
@@ -570,17 +552,6 @@ function Phrase(phrase, champ, vide, stir, blocs, frags, save) //construit un di
 							else
 								infix="<a style=\"background-color:#EAF7DA\""+infix;
 						}
-						
-						/*else 
-						
-						{	
-							if ((j%3==0)||(this.permutation[i]==this.elements.length-1))						
-								infix="<a style=\"background-color:#ECF6F6\""+infix;
-							else if (j%3==1)
-								infix="<a style=\"background-color:#F5EED6\""+infix;
-							else
-								infix="<a style=\"background-color:#EAF7DA\""+infix;
-						}*/
 					}
 				
 				else
@@ -590,8 +561,7 @@ function Phrase(phrase, champ, vide, stir, blocs, frags, save) //construit un di
 			}
 		}
 		
-		//var backButton = "<button id=\"backBtn\" style=\"font-size:26px;\" onclick=\"back()\">"+←+"</button>";
-		var backButton = "<button id=\"backBtn\" style=\"font-size:22px;\" onclick=\"back()\">←</button><br><button id=\"stir\" style=\"font-size:25px;\" onclick=\"layOut(true,false)\">×</button>";
+		var backButton = "<button id=\"backBtn\" style=\"font-size:22px;\" onclick=\"back()\">←</button><br><button id=\"stir\" style=\"font-size:25px;\" onclick=\"layOut(true,false,true)\">×</button>";
 	
 	text="<p onmouseleave=mClear()>"+text+" "+backButton+"</p>";
 
@@ -890,6 +860,8 @@ function Phrase(phrase, champ, vide, stir, blocs, frags, save) //construit un di
 			
 			this.memory.splice(n,1);
 			
+			this.snake.pop();
+			
 			this.display.innerHTML=this.toHTML(-1);
 		}
 	}
@@ -969,6 +941,8 @@ function Serpent(phrase)
 			
 			if (n>-1)
 				this.list=this.memory[n];
+			
+			this.memory.splice(n,1);			
 		}
 	
 	this.clip=function(n)
@@ -984,53 +958,12 @@ function Serpent(phrase)
 			{
 				this.list.splice(n+1,0,this.list[m]);
 				this.list.splice(m,1);
-				
-				/*if (n==this.list.length-1)
-					{
-						if (this.sentence.permutation[n]==n)
-							{
-								this.list[n]=0;
-								if (this.list[n-1]==0)
-									{
-										if (this.list[n-2]==1)
-											this.list[n-1]=2;
-										else
-											this.list[n-1]=1;									}
-									}
-						else if (this.list[n]==this.list[n-1])
-								this.list[n]=(this.list[n]+1)%3;
-					}*/
-				
-				/*if ((n==this.list.length-1)&&(this.sentence.permutation[n]==n))
-					{
-						this.list[n]=0;
-						if ((n>1)&&(this.list[n-1]==0))
-							if (this.list[n-2]==1)
-								this.list[n-1]=2;
-							else
-								this.list[n-1]=1;
-					}*/
 			}
 		
 		else			
 			{
 				this.list.splice(n,0,this.list[m]);
 				this.list.splice(m+1,1);
-				
-				/*if (n==0)
-				{
-					if (this.sentence.permutation[0]==0)
-						{						
-							this.list[0]=0;
-							if (this.list[0]==0)
-								if (this.list[2]==1)
-									this.list[1]=2;
-							else
-								this.list[1]=1;
-						}
-					else if (this.list[0]==this.list[1])
-						alert('a');
-				}*/
 			}
 	}
 	
