@@ -178,7 +178,7 @@ div.droite {
 </div>
 <script>
 
-//var a=['Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu.', 'En archí ín o lógos, kaí o lógos ín prós tón theón, kaí theós ín o lógos.', 'Ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν θεόν, καὶ θεὸς ἦν ὁ λόγος.'];
+//var a=['Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu.', 'En archí ín o lógos, kaí o lógos ín prós tón theón, kaí theós ín o lógos.', 'Ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν θεόν, καὶ θεὸς ἦν ὁ λόγος.'];
 
 //elements d'affichage et leur contrôle
 
@@ -396,7 +396,7 @@ var permutation=[0,1,2], one, two, selection=0, compte=0;
 function showLine(n){
 	selection-=1<<n;
 	countLines();			
-	layOut(false,false);
+	layOut(false,false,false);
 }
 
 function hideLine(n){
@@ -405,7 +405,7 @@ function hideLine(n){
 		{
 			selection+=1<<n;
 			countLines();			
-			layOut(false,false);
+			layOut(false,false,false);
 		}
 }
 
@@ -497,7 +497,7 @@ function mU(i)
 		else current.snake.clip(un);
 		
 		current.save=true;
-		layOut(false,true);
+		layOut(false,true,true);
 		//current.upDate();
 		/*current.snake.smooth();
 		mainDisplayArea.innerHTML=current.toHTML(-1);*/
@@ -566,7 +566,7 @@ function psefisato(n)
 		mainDisplayArea.innerHTML=current.toHTML(-1);
 }
 
-function layOut(nupela,snake){ //affiche le haut et le bas à partir de "source", réinitialise la phrase si elle est vide, initialise le serpent s'il n'y en a pas.
+function layOut(nupela,snake,bottom){ //affiche le haut et le bas à partir de "source", réinitialise la phrase si elle est vide, initialise le serpent s'il n'y en a pas.
 	var a=source[namba], phrase=a[0];
 	current=text[namba]; //scope !
 	pagesDisplayArea.innerHTML='Page '+(namba+1)+'/'+source.length;
@@ -584,7 +584,8 @@ function layOut(nupela,snake){ //affiche le haut et le bas à partir de "source"
 		current.snake.init();
 	
 	//current.upDate();
-	mainDisplayArea.innerHTML=current.toHTML(-1); //phrase à reconstituer
+	if (bottom)
+		mainDisplayArea.innerHTML=current.toHTML(-1); //phrase à reconstituer
 	
 	sentence=current.toText();
 	
@@ -631,7 +632,7 @@ function brasse(n){
 	else
 		namba=Math.floor(Math.random()*source.length);
 			
-	layOut(false,false);
+	layOut(false,false,true);
 }
 
 function back(){
@@ -705,7 +706,7 @@ function makeText(){ //crée "source" avec des mots vides
 	//alert('source '+source.length);
 
 	//reSet(); bas seulement
-	layOut(false,false);
+	layOut(false,false,true);
 }
 
 </script>
