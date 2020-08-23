@@ -1,1 +1,671 @@
-En construction
+<!DOCTYPE html>
+<script src="brouillage.js"> //petite bibliothèque pour changer la casse, activer des déclencheurs, permuter des lettres, etc.
+</script>
+<script src="MO.js"> //fichiers sources
+</script>
+<html>
+<head>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+<title>Olsobip</title>
+<style>
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+</style>
+</head>
+<body>
+<div id=panel>
+<font size=6>
+<b>Tableau de bord des paramètres</b>
+<br></br>
+</font>
+<font size="5">
+<b>Mode</b>
+<br>
+<div id="modes">
+  <input type="radio" id="r0" name="mode" value="Mots" checked="checked"> Mots
+  <br>
+  <input type="radio" id="r1" name="mode" value="Paires"> Paires
+  <br>
+  <input type="radio" id="r2" name="mode" value="Fragments"> Fragments 
+  <br>
+  <input type="radio" id="r3" name="mode" value="Permutations"> Permutations
+  <br></br>
+</div>
+
+<div><b>Choix du fichier</b><br><input type="file" id="fileInput"></div>
+<br>
+<b>Eléments</b>
+<br>
+<div id=simple>
+Mots: 
+<select id=slova onchange="updateSlo()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+Autres mots: 
+<select id=others onchange="updateOth()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+Mots affichés: 
+<select id=display onchange="updateDis()">
+                        <option>12</option>
+                        <option>4</option>i
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>15</option>
+                        <option>18</option>
+                        <option>20</option>
+                        <option>24</option>
+                        <option>30</option>
+                        <option>36</option>
+                        <option>45</option>
+</select>
+</div>
+<div id=paires>
+Paires de mots: 
+<select id=paslo onchange="updatePas()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+Autres mots: 
+<select id=others onchange="updateOth()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+Mots affichés: 
+<select id=display onchange="updateDis()">
+                        <option>12</option>
+                        <option>4</option>i
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>15</option>
+                        <option>18</option>
+                        <option>20</option>
+                        <option>24</option>
+                        <option>30</option>
+                        <option>36</option>
+                        <option>45</option>
+</select>
+</div>
+<div id=fragments>
+Nombre de fragments: 
+<select id=others onchange="updateOth()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+Taille des fragments: 
+<select id=display onchange="updateDis()">
+                        <option>3</option>
+                        <option>2</option>i
+                        <option>4</option>
+</select>
+Nombre de mots: 
+<select id=paslo onchange="updatePas()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+</div>
+<div id=permutations>
+Mots: 
+<select id=slova onchange="updateSlo()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+Permutations par mot: 
+<select id=others onchange="updateOth()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+</div>
+<br>
+<div>
+<b>Longueur des mots</b>
+<br>
+Minimum: 
+<select id=minL onchange="updateML()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+Intervalle: 
+<select id=range onchange="updateRange()">
+                        <option>4</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>8</option>
+                        <option>10</option>
+                        <option>12</option>
+                        <option>16</option>
+</select>
+Fenêtre: 
+<select id=display onchange="updateWin()">
+                        <option>aucune</option>
+                        <option>30</option>
+                        <option>60</option>
+                        <option>150</option>
+                        
+</select>
+</div>
+<br>
+<b>Divers</b>
+<br>
+<div>
+Renouvellement: 
+<select id=turnup onchange="updateTU()">
+                        <option>1/1</option>
+                        <option>1/6</option>
+                        <option>1/3</option>
+                        <option>1/4</option>
+                        <option>1/2</option>
+                        <option>2/3</option>
+                        <option>3/4</option>
+                        <option>4/5</option>
+</select>
+</div>
+<div>
+Majuscules aléatoires: 
+<select id=big onchange="updateMA()">
+                        <option>aucune</option>
+                        <option>1/18</option>
+                        <option>1/12</option>
+                        <option>1/8</option> 
+                        <option>1/6</option>
+                        <option>1/3</option>
+                        <option>1/4</option>
+                        <option>1/2</option>
+                        <option>2/3</option>
+                        <option>3/4</option>
+                        <option>4/5</option>
+</select>
+</div>
+<br>
+<div><button onclick="on()"><b><font size=5>OK</font></b></button></div>
+</font>
+</div>
+
+
+<div id="guts">
+<font size=6>
+<button onclick="parameters()"><font size=5>Paramètres</font></button>
+<button onclick="appatrie()"><font size=5><b>NOUVEAU</b></font></button>
+<br>
+</br>
+<div id= "mots"; class="noselect"></div>
+<br>
+<div id="main"; class="noselect"></div>
+</font>
+</div>
+
+</font>
+
+<script>
+
+var nSearch=4;//mots ou paires de mots à trouver
+var nFind=4;//autres mots ou nombre de permutations par mot
+var nDisplay=12;//nombre de mots affichés en tout
+
+var percentage=1;
+var majuscules=0;
+var fileInput = document.getElementById('fileInput');
+var fileDisplayArea = document.getElementById('main');
+
+var dictionary='';
+var arry=[]; //dictionnaire
+var buff=[]; //mots à trouver du moment
+var fubb=[]; //tampon de mots provisoires
+var option=0; //0:mots, 1:paires, 2:Fragments, 3:permutations
+
+toWords();
+
+document.getElementById("guts").style.display="none";
+
+loadDictionary();
+
+
+//initialisation du mode
+
+function toPairs()
+{
+	document.getElementById("simple").style.display="none";
+	document.getElementById("paires").style.display="block";
+	document.getElementById("fragments").style.display="none";
+	document.getElementById("permutations").style.display="none";	
+}
+
+function toWords()
+{
+	document.getElementById("simple").style.display="block";
+	document.getElementById("paires").style.display="none";
+	document.getElementById("fragments").style.display="none";
+	document.getElementById("permutations").style.display="none";
+}
+
+function toFragments()
+{
+	document.getElementById("simple").style.display="none";
+	document.getElementById("paires").style.display="none";
+	document.getElementById("fragments").style.display="block";
+	document.getElementById("permutations").style.display="none";
+}
+
+function toPermutations()
+{
+	document.getElementById("simple").style.display="none";
+	document.getElementById("paires").style.display="none";
+	document.getElementById("fragments").style.display="none";
+	document.getElementById("permutations").style.display="block";
+}
+
+var r0=document.getElementById("r0");
+r0.addEventListener('change', function(e){
+	if (r0.checked){
+		option=0;
+		toWords();
+		trie();
+		}
+	});
+		
+r1.addEventListener('change', function(e){
+	if (r1.checked){
+		option=1;
+		toPairs();
+		apparie();
+		}
+	});
+		
+r2.addEventListener('change', function(e){
+	if (r2.checked){
+		option=2;
+		toFragments();
+		trie();
+		}
+	});
+		
+r3.addEventListener('change', function(e){
+	if (r3.checked){
+		option=3;
+		toPermutations();
+		trie();
+		}
+	});
+
+
+document.getElementById("guts").style.display="none";
+
+document.getElementById("permutations").style.display="none";
+
+function on(){
+	if (arry.length<2)
+		alert('Choisir un fichier texte !')
+	else {
+			document.getElementById("panel").style.display="none";
+			document.getElementById("guts").style.display="block";
+			appatrie();
+	}
+}
+
+function parameters(){
+	document.getElementById("panel").style.display="block";
+	document.getElementById("guts").style.display="none";
+}
+
+var ohm = document.getElementById("slova");
+	
+updateSlo = function() {
+    var r = parseInt(ohm.value);
+	if (r>nFind)
+    	{
+			var n=arry.length-nFind;
+    		for (var i=nFind; i<r; i++)
+    		{
+    			var x=Math.floor(Math.random()*n);
+		 		var TokTok = arry[x];
+		 		buff.push(TokTok);
+		 		arry[x]=arry[n-1];
+ 				arry[n-1]=TokTok;
+ 				n--;
+    		}
+    	}
+    else if (r<nFind)
+    	{
+    		buff=buff.slice(0,r);
+    	}
+    nFind = r;
+    change(nFind);
+}
+var pas = document.getElementById("paslo");
+updatePas = function() {
+    var r = parseInt(pas.value);
+	if (r>nFind)
+    	{
+			var n=arry.length-nFind;
+    		for (var i=nFind; i<r; i++)
+    		{
+    			var x=Math.floor(Math.random()*n);
+		 		var TokTok = arry[x];
+		 		buff.push(TokTok);
+		 		arry[x]=arry[n-1];
+ 				arry[n-1]=TokTok;
+ 				n--;
+    		}
+    	}
+    else if (r<nFind)
+    	{
+    		buff=buff.slice(0,r);
+    	}
+    nFind = r;
+    change(nFind);
+}
+
+var modes = document.getElementById("modes");
+updateModes = function() {
+    alert(modes.value);
+}
+
+var autres = document.getElementById("others");
+updateOth = function() {
+    var r = parseInt(autres.value);
+    nSearch = r;
+}
+var tableau = document.getElementById("display");
+updateDis = function() {
+    var r = parseInt(tableau.value);
+    nDisplay = r;
+}
+
+var proportion = document.getElementById("turnup");
+updateTU = function() {
+    var r = proportion.value;
+    var secondPos=r.indexOf('/');
+	var p=parseInt(r.slice(0,secondPos));
+	var q=parseInt(r.slice(secondPos+1));
+	percentage=p/q;
+}
+
+var bigpela = document.getElementById("big");
+updateMA = function() {
+    var r = bigpela.value;
+    majuscules=0;
+    var secondPos=r.indexOf('/');
+    if (secondPos>0){
+			var p=parseInt(r.slice(0,secondPos));
+			var q=parseInt(r.slice(secondPos+1));
+			majuscules=p/q;
+    }
+}
+
+function quip(k)
+{
+		//alert(k);
+		if (k>-1) {
+			quip(k-1);
+			var name="no"+k;
+			var nom="on"+k;
+			var d=document.getElementById(name);
+			var dd=document.getElementById(nom);
+			d.addEventListener("click", function(){
+				d.style.color="red";
+				dd.style.color="blue";
+			});
+		}
+}
+
+
+		
+fileInput.addEventListener('change', function(e) {
+	var file = fileInput.files[0];
+	var textType = /text.*/;
+
+	if (file.type.match(textType)) {
+		var reader = new FileReader();
+
+		reader.onload = function(e) {
+			arry=[];
+			buff=[];
+			fileDisplayArea.innerText = reader.result;
+			dictionary=reader.result;
+			var j=0, k=0;
+			//while (k<1000)			
+			while (dictionary.length>3)
+				{
+					var secondPos=dictionary.indexOf('\n');
+					var line=dictionary.slice(0,secondPos);
+					//alert(line);
+					arry.push(line);
+					dictionary=dictionary.slice(secondPos+1);
+					j++;
+					k+=secondPos+1;
+					firstPos=secondPos;
+				}
+			n=arry.length
+			for (var i=0; i<nFind; i++)
+			{
+			 	var x=Math.floor(Math.random()*n);
+			 	var TokTok = arry[x];
+			 	buff.push(TokTok);
+			 	arry[x]=arry[n-1];
+	 			arry[n-1]=TokTok;
+	 			n--;
+			}
+			//alert(buff);
+			if (option==1)
+				apparie();
+				
+			else trie();
+		}
+
+		reader.readAsText(file);
+		} 
+	
+	else {
+		fileDisplayArea.innerText = "File not supported!"
+	}
+});
+
+function loadDictionary()
+{
+	arry=[];
+	buff=[];
+	dictionary=BI;
+	var j=0, k=0;
+	//while (k<1000)			
+	while (dictionary.length>3)
+		{
+			//alert (dictionary.length);
+			var secondPos=dictionary.indexOf('\n');
+			var line=dictionary.slice(0,secondPos);
+			//alert(line);
+			arry.push(line);
+			dictionary=dictionary.slice(secondPos+1);
+			j++;
+			k+=secondPos+1;
+			firstPos=secondPos;
+		}
+	n=arry.length
+	for (var i=0; i<nFind; i++)
+	{
+	 	var x=Math.floor(Math.random()*n);
+	 	var TokTok = arry[x];
+	 	buff.push(TokTok);
+	 	arry[x]=arry[n-1];
+			arry[n-1]=TokTok;
+			n--;
+	}
+	//alert(buff);
+	if (option==1)
+		apparie();
+		
+	else trie();
+}
+
+function trie() {
+var n=arry.length-nFind, text='', mots="", tab=[], indices=[], champ=document.getElementById('mots');
+for (i=0; i<nFind; i++)
+{
+ 	mots=mots+"<a id=\"on"+i+"\">"+buff[i]+"</a> ";
+}
+
+champ.innerHTML=mots;
+
+for (i=0; i<nSearch; i++)
+{
+ 	var x=Math.floor(Math.random()*n);
+ 	var TokTok = arry[x];
+ 	tab.push(TokTok);
+ 	arry[x]=arry[n-1];
+	arry[n-1]=TokTok;
+	n--;
+	//alert(text);
+}
+
+
+bat=[]; //tableau de mots à afficher
+for (i=0; i<nDisplay; i++)
+{
+ 	var x=Math.floor(Math.random()*nSearch);
+ 	var insert=tab[x];
+ 	if (majuscules>0)
+ 		insert=brouille(insert, majuscules);
+ 	bat.push(insert);
+ 	indices.push(i);
+}
+//alert(bat);
+n=nDisplay;
+for (i=0; i<nFind; i++)
+{
+ 	var x=Math.floor(Math.random()*n);
+ 	var insert=buff[i];
+ 	if (majuscules>0)
+ 		insert=brouille(insert, majuscules);
+ 	bat[indices[x]]="<a id=\"no"+i+"\">"+insert+"</a>";
+ 	indices[x]=indices[n-1];
+ 	n--
+}
+
+for (i=0; i<nDisplay; i++)
+{
+ 	text=text+" "+bat[i];
+}
+
+fileDisplayArea.innerHTML = text;
+
+n=arry.length-nFind;
+var m=nFind;
+
+fubb=[];
+
+for (var i=0; i<nFind; i++){
+	if (Math.random()>percentage){
+		//draw from buff
+		var x=Math.floor(Math.random()*m);
+		fubb.push(buff[x]);
+		buff[x]=buff[m-1];
+		//alert(buff);
+		m--
+	}
+	
+	else {	//draw from arry
+		var x=Math.floor(Math.random()*n);
+		var TokTok = arry[x];
+		fubb.push(TokTok);
+		arry[x]=arry[n-1+nFind];
+		arry[n-1+nFind]=TokTok;
+		n--
+	}
+}
+
+buff=fubb;
+
+quip(nFind);
+
+}//trie
+    	
+</script>
+</body>
+</html
