@@ -305,9 +305,6 @@ toWords();
 
 document.getElementById("guts").style.display="none";
 
-loadDictionary();
-
-
 //initialisation du mode
 
 function toPairs()
@@ -375,19 +372,19 @@ r3.addEventListener('change', function(e){
 		}
 	});
 
-
 document.getElementById("guts").style.display="none";
 
 document.getElementById("permutations").style.display="none";
 
 function on(){
-	if (arry.length<2)
-		alert('Choisir un fichier texte !')
-	else {
+	//if (arry.length<2)
+		//alert('Choisir un fichier texte !')
+	//else {
 			document.getElementById("panel").style.display="none";
 			document.getElementById("guts").style.display="block";
+			loadDictionary();
 			appatrie();
-	}
+	//}
 }
 
 function parameters(){
@@ -552,7 +549,7 @@ function loadDictionary()
 {
 	arry=[];
 	buff=[];
-	dictionary=BI;
+	dictionary=BI.slice(0);
 	var j=0, k=0;
 	//while (k<1000)			
 	while (dictionary.length>3)
