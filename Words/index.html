@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta http-equiv="content-type" content="text/html;charset=utf-8" />
-<title>Olsobip</title>
+<title>Kolomantik</title>
 <style>
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
@@ -300,10 +300,33 @@ var arry=[]; //dictionnaire
 var buff=[]; //mots à trouver du moment
 var fubb=[]; //tampon de mots provisoires
 var option=0; //0:mots, 1:paires, 2:Fragments, 3:permutations
+var molokantik=-1;
 
 toWords();
 
 document.getElementById("guts").style.display="none";
+
+//événements
+
+function mU(n)
+{
+	if (molokantik==n)
+	{
+		var name="no"+n;
+		var nom="on"+n;
+		var d=document.getElementById(name);
+		var dd=document.getElementById(nom);
+		d.style.color="red";
+		dd.style.color="blue";
+	}
+	
+	molokantik=-1;
+}
+
+function mD(n)
+{
+	molokantik=n;
+}
 
 //initialisation du mode
 
@@ -585,7 +608,7 @@ function trie() {
 var n=arry.length-nFind, text='', mots="", tab=[], indices=[], champ=document.getElementById('mots');
 for (i=0; i<nFind; i++)
 {
- 	mots=mots+"<a id=\"on"+i+"\">"+buff[i]+"</a> ";
+ 	mots=mots+"<a onmousedown=\"mD("+i+")\" onmouseup=\"mU("+i+")\" id=\"on"+i+"\">"+buff[i]+"</a> ";
 }
 
 champ.innerHTML=mots;
@@ -620,7 +643,7 @@ for (i=0; i<nFind; i++)
  	var insert=buff[i];
  	if (majuscules>0)
  		insert=brouille(insert, majuscules);
- 	bat[indices[x]]="<a id=\"no"+i+"\">"+insert+"</a>";
+ 	bat[indices[x]]="<a onmousedown=\"mD("+i+")\" onmouseup=\"mU("+i+")\" id=\"no"+i+"\">"+insert+"</a>";
  	indices[x]=indices[n-1];
  	n--
 }
@@ -659,7 +682,7 @@ for (var i=0; i<nFind; i++){
 
 buff=fubb;
 
-quip(nFind);
+//quip(nFind);
 
 }//trie
     	
