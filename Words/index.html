@@ -300,7 +300,7 @@ var arry=[]; //dictionnaire
 var buff=[]; //mots à trouver du moment
 var fubb=[]; //tampon de mots provisoires
 var option=0; //0:mots, 1:paires, 2:Fragments, 3:permutations
-var molokantik=-1;
+var molokantik=-1, lain=-1;
 
 toWords();
 
@@ -308,9 +308,9 @@ document.getElementById("guts").style.display="none";
 
 //événements
 
-function mU(n)
+function mU(n,k)
 {
-	if (molokantik==n)
+	if ((molokantik==n)&&(lain>-1)&&(lain!=k))
 	{
 		var name="no"+n;
 		var nom="on"+n;
@@ -321,11 +321,13 @@ function mU(n)
 	}
 	
 	molokantik=-1;
+	lain=-1;
 }
 
-function mD(n)
+function mD(n,k)
 {
 	molokantik=n;
+	lain=k;
 }
 
 //initialisation du mode
@@ -608,7 +610,7 @@ function trie() {
 var n=arry.length-nFind, text='', mots="", tab=[], indices=[], champ=document.getElementById('mots');
 for (i=0; i<nFind; i++)
 {
- 	mots=mots+"<a onmousedown=\"mD("+i+")\" onmouseup=\"mU("+i+")\" id=\"on"+i+"\">"+buff[i]+"</a> ";
+ 	mots=mots+"<a onmousedown=\"mD("+i+",0)\" onmouseup=\"mU("+i+",0)\" id=\"on"+i+"\">"+buff[i]+"</a> ";
 }
 
 champ.innerHTML=mots;
@@ -643,7 +645,7 @@ for (i=0; i<nFind; i++)
  	var insert=buff[i];
  	if (majuscules>0)
  		insert=brouille(insert, majuscules);
- 	bat[indices[x]]="<a onmousedown=\"mD("+i+")\" onmouseup=\"mU("+i+")\" id=\"no"+i+"\">"+insert+"</a>";
+ 	bat[indices[x]]="<a onmousedown=\"mD("+i+",1)\" onmouseup=\"mU("+i+",1)\" id=\"no"+i+"\">"+insert+"</a>";
  	indices[x]=indices[n-1];
  	n--
 }
