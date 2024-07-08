@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orchidaceae</title>
+</head>
+
+    <body>
+
+            <div id="masque">
+                <button class="H" id="prev" onclick="backw()"> &#8656; </button>
+                <button class="H" id="next" onclick="forw()"> &#8658; </button>
+                <button class="V" id="up"> &#8657; </button>
+                <button class="V" id="down"> &#8659; </button>
+
+                    <div id="film">
+                            <img src='images/Apostasia.jpg'>
+                    </div>
+
+            </div>
+
+    <script>
+
+        var X=document.getElementById("film");
+        var SF=["Apostasia","Cypripedium","Pogonia","Ophrys","Bulbophyllum"];
+        var i=0;
+
+        function backw () {
+                i=(i+4)%5;
+                var suffix="<img src='images/"+SF[i]+".jpg' >";
+                //alert(suffix);          
+                X.innerHTML=suffix;
+        }
+        function forw () {
+                i=(i+1)%5;
+                var suffix="<img src='images/"+SF[i]+".jpg' >";
+                //alert(suffix);          
+                X.innerHTML=suffix;
+        }
+
+        //forw();
+
+    </script>
+    </body>
+
+</html>
