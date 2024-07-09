@@ -1,0 +1,64 @@
+<html>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+</meta>
+<head>
+
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="Style.css">
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+	</script>
+
+	<script src="Data.js">
+	</script>
+</head>
+
+<body>
+
+<div class="topnav">
+	<div id="links">
+			<a href="#photo">Photorama</a>
+			<a href="#classification">Classification</a>
+			<a href="Quiz.html">Quiz</a>
+	</div>
+	<div id="icon" onclick="display()">☰</div>
+</div>
+
+  <h1 id="mainTitle"><b>Classification des Orchidées</b></h1>
+  <h4 id="author">Par Philippe Cuénoud</h4>
+
+<div id="vvedienie">
+		Version simplifiée du projet de fin d'études.
+<!--vvedienie-->
+
+<hr>
+ 
+<div id="photo"><h2>Photorama</h2>
+	<div id="cadre">
+			<span id="info"></span>
+
+			<div id="masque">
+				<button class="H" id="prev"> &#8656; </button>
+				<button class="H" id="next"> &#8658; </button>
+				<button class="V" id="up"> &#8657; </button>
+				<button class="V" id="down"> &#8659; </button>
+
+				<div id="film">
+				<img src="images/Apostasia.jpg">
+				</div>
+				
+
+			</div>
+	</div>
+</div>
+<!--photorama-->
+
+<script src="Photorama.js">
+</script>
+
+</body>
+</html>
+
+
+
