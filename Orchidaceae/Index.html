@@ -1,0 +1,139 @@
+<html>
+<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+</meta>
+<head>
+
+	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="Style.css">
+
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+	integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+	</script>
+
+	<script src="Data.js">
+	</script>
+</head>
+
+<body>
+
+<div class="topnav">
+	<div id="links">
+			<a href="#photo">Photorama</a>
+			<a href="#classification">Classification</a>
+			<a href="Quiz.html">Quiz</a>
+	</div>
+	<div id="icon" onclick="display()">☰</div>
+</div>
+
+  <h1 id="mainTitle"><b>Classification des Orchidées</b></h1>
+  <h4 id="author">Par Philippe Cuénoud</h4>
+
+<div id="vvedienie">
+		La famille des Orchidées est d'une exceptionnelle richesse et d'une immense complexité.
+Ce site propose une exploration de la famille des Orchidées en suivant les plus récentes classifications moléculaires proposées par des auteurs contemporains (pour la plupart Américains, Brésiliens et Mexicains).
+<br></br>
+		<div id="hierarchy">
+		La classification est organisée en six niveaux:
+				<ul>
+					<li>la famille</li>
+					<li>la sous-famille (il y a cinq sous-familles chez les orchidées)</li>
+					<li>la tribu (vingt-quatre)</li>
+					<li>la sous-tribu (soixante-trois)</li>
+					<li>le genre (environ huit-cent)</li>
+					<li>l'espèce (plus de vingt-cinq-mille).</li>
+				</ul>
+		Ici, la classification sera présentés sous la forme suivante: <span class='petites-capitales'><b>Sous-Famille</b></span> > <span class='petites-capitales'>Tribu</span> > Sous-Tribu > <i>Genre</i>.
+		<br></br>
+		<p>La famille est omise, puisque c'est toujours celle des Orchidées. L'espèce est donnée dans les quelques exemples présentés pour chaque sous-tribu.</p>
+		</div>
+
+
+<p>Le <a href="#photo">diaporama</a> donne une illustration des tribus et sous-tribus principales, on y navigue latéralement pour les sous-familles, verticalement pour les tribus, puis latéralement à nouveau pour les sous-tribus.
+</p>
+
+<p>La <a href="#classification">classification</a> complète est donnée ci-dessous (avec seulement quelques exemples de genres et d'espèces pour chaque sous-tribu), il est possible d'y naviguer en cliquant sur les liens en rapport avec les niveaux choisis. Le retour au niveau de la famille ramène à l'accueil.
+</p>
+
+<p>Le <a href="Quiz.html">jeu</a> (approchez la souris du bas de la page) permet de tester ses connaissances: à quelle sous-famille appartient une tribu ou sous-tribu donnée, à quelle tribu appartient une sous-tribu ? Ne vous inquiétez pas si vous avez du mal au début, j'y étais très mauvais quand je l'ai commencé, mais cette pratique m'a fait progresser très vite...
+</p>
+</div>
+<!--vvedienie-->
+
+<hr>
+ 
+<div id="photo"><h2>Photorama</h2>
+	<div id="cadre">
+			<span id="info"></span>
+
+			<div id="masque">
+				<button class="H" id="prev"> &#8656; </button>
+				<button class="H" id="next"> &#8658; </button>
+				<button class="V" id="up"> &#8657; </button>
+				<button class="V" id="down"> &#8659; </button>
+
+				<div id="film">
+				<img src="images/Apostasia.jpg">
+				</div>
+				
+
+			</div>
+	</div>
+</div>
+<!--photorama-->
+
+<hr>
+
+
+<div id="classification"><h2>Classification</h2>
+
+	<ul class="general">
+		<li><div class="brique">
+			<a href="Subfamilies.html?sub=Apostasioideae"><b>Apostasioideae</b></a>
+			<img src="./Images/Apostasia.jpg">
+			</div>
+		</li>
+		<li>
+			<div class="brique"><a href="Subfamilies.html?sub=Vanilloideae"><b>Vanilloideae</b></div></a>
+			<img src="./Images/vanilla.jpg">
+		</li>
+		<li>
+			<div class="brique">
+			<a href="Subfamilies.html?sub=Cypripedioideae"><b>Cypripedioideae</b></a>
+			<img src="./Images/Cypripedium.jpg">
+			</div>
+		</li>
+		<li>
+			<div class="brique">
+			<a href="Subfamilies.html?sub=Orchidoideae"><b>Orchidoideae</b></a>
+			<img src="./Images/Ophrys.jpg">
+			</div>
+		</li>
+		<li>
+			<div class="brique"><a href="Subfamilies.html?sub=Epidendroideae"><b>Epidendroideae</b></a>
+			<img src="./Images/Laelia.jpg">
+			</div>
+		</li>
+	</ul>
+</div>
+<!--classification-->
+
+<div id="quiz">
+	<h4>Testez vos connaissances !
+	<br></br>
+	<a href="Quiz.html">
+		<button class="J" id="Q">Commencer</button>
+	</a>
+	</h4>
+</div>
+
+<script src="Photorama.js">
+</script>
+
+<script src="Foot.js">
+</script>
+
+</body>
+</html>
+
+
+

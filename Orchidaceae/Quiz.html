@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body id="Ouessant">
+    <h2><form id="question">
+        <p>
+            <span id="namba"></span>
+            <br></br>
+            <div id="vopros">A quelle <span id="higher"></span> appartient la <span id="lower"></span> des <span id="lowName"></span> ?</div>
+        </p>
+        <div id="choice">
+            <!-- les indices "choice" vont de 1 à 3 mais les valeurs "answer" de 0 à 2: parce qu'il s'agit d'entrées d'u tableau dans ce dernier cas -->
+            <input type="radio" id="choice1" name="answer" value="a0" />
+            <label for="choice1"><span id=ch1></span></label>
+            <br></br>
+            <input type="radio" id="choice2" name="answer" value="a1" />
+            <label for="choice2"><span id="ch2"></span></label>
+            <br></br>
+            <input type="radio" id="choice3" name="answer" value="a2" />
+            <label for="choice3"><span id="ch3"></span></label>
+        </div>
+        <br>
+        </br>
+            <div>
+                <button type="submit" onclick="respond(e)">Soumettre</button>
+            </div>
+        <br>
+        </br>
+        <div>
+            juste:<span id="juste"></span>
+            <br></br>
+            faux:<span id="faux"></span>
+        </div>
+        <br></br>
+        <div id="summary"></div>
+        <div id="return">
+            <a href="Index.html#classification">Retour aux Orchidées</a>
+        </div>
+    </form></h2>
+</body>
+
+<script src="Data.js">
+</script>
+
+<script src="Quiz.js">
+</script>
+
+
+
+
+</html>

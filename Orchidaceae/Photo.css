@@ -1,0 +1,74 @@
+        #masque img {
+            width: 100%; /* Pour s'adapter à la largeur de l'emplacement */
+            height: auto; /* Pour conserver les proportions de l'image */    
+        }
+
+        #cadre {
+            width: 800px;
+            height: auto;
+            position: relative;
+            margin-top: 17px;
+            background-color: aquamarine;
+          }
+
+        #cadre button
+        {
+            font-size: 4em;
+            color: saddlebrown;
+            display: block;
+            position: absolute;
+            z-index: 9999999;
+            opacity: 0;
+        }
+
+        #cadre .H
+       {
+            transform: translateY(50%);
+            height: 50%;
+            width: 80px;
+        }
+            
+        #cadre #prev {
+            left: 0;
+        }
+
+        #cadre #next {
+            right: 0;
+        }
+
+        #cadre .V
+        {
+            transform: translateX(180%);
+            width: 20%;
+            height: 80px;
+            display: none;
+        }
+
+        #cadre #up {
+            top: 0;
+        }
+
+        #cadre #down {
+            bottom: 0;
+        }
+
+        #cadre button:hover {
+            background-color: rosybrown;
+            opacity: 0.65;
+            cursor: pointer;
+        }
+
+        #film {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 600px;
+        }
+
+        .petites-capitales {
+            font-variant: small-caps;
+        }
+
+        #info {
+            font-size: adjust;
+        }
