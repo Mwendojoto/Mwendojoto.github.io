@@ -35,12 +35,18 @@ div.gauche {
 div.centre {
   position: relative;
   margin: auto;
-  width: 170px;
+  width: 205px;
   border: 3px solid #73AD21;
-  padding: 20px;
+  padding: 15px;
   height: auto;
   border: 4px solid #fbca93;
   background: #d6fff8;
+}
+
+div.centre #score {
+	padding: 7px;
+	padding-top:15px;
+	font-size: .75em;
 }
 
 div.droite {
@@ -99,8 +105,8 @@ div.droite {
 		 <div><input type="file" id="fileInput"><button onclick="parseDictionary()">Lancer</button></div>
 	<div id="vues">
 	Vue:
-	  <input type="radio" id="v0" name="vues" value="Simultanée" checked="checked"> Simultanée
-	  <input type="radio" id="v1" name="vues" value="Alternée"> Alternée
+	  <input type="radio" id="v0" name="vues" value="SimultanÃ©e" checked="checked"> Simultanée
+	  <input type="radio" id="v1" name="vues" value="AlternÃ©e"> Alternée
 	<br>
 	</div>
 		Langues:
@@ -123,8 +129,13 @@ div.droite {
 			<option>9</option>
 			<option>10</option>
 		</select>
+		<div id="Langue">
+			Lecture:
+			<input type="radio" id="l0" name="langue" value="Oui"  checked="checked"> Français
+			<input type="radio" id="l1" name="langue" value="Non"> Russe
+			<input type="radio" id="l2" name="langue" value="Non"> Italien
+		</div>
  	</div>
-
 	<div id="parameters" class="droite">
 		<div id="permutations">
 			Permutation:
@@ -136,6 +147,12 @@ div.droite {
 			Blocs:
 			<input type="radio" id="b0" name="blocs" value="Oui"> Oui
 			<input type="radio" id="b1" name="blocs" value="Non" checked="checked"> Non
+			<br>
+		</div>
+		<div id="pairs">
+			Paires:
+			<input type="radio" id="p0" name="pairs" value="Oui"> Oui
+			<input type="radio" id="p1" name="pairs" value="Non" checked="checked"> Non
 			<br>
 		</div>
 		Mots manquants: 
@@ -166,6 +183,8 @@ div.droite {
   <button id="newBtn" style="font-size:26px; width:50px" onclick="brasse(-1)">←</button>
   <button id="reSet" style="font-size:26px;" onclick="brasse(0)">↻</button>
   <button id="newBtn" style="font-size:26px; width:50px" onclick="brasse(1)">→</button>
+  <div id="score">
+  </div>
  </div> 
 <div id="contents">
 	<div id="ctrl0"><button id="mnBtn0" style="font-size:12px;" onclick="hide(1)">-</button></div>
@@ -173,16 +192,21 @@ div.droite {
 	</div>
 	<div id="ctrl1"><button id="mnBtn1" style="position: relative; font-size:12px;" onclick="hide(2)">-</button></div>
 	<div id="lower"  width="auto" class="noselect" oncontextmenu="return false;" style="position: relative; line-height:36px; font-size:22px; background: #99ccff; height: auto; max-width:75%; border: 1px solid rgb(255,84,104); padding: 20px; margin: 20px;">
-	</div>
+</div>
+<div id="igra"><button onclick="joue()">▶</button></div>
 </div></font>
 </div>
+<script src="https://code.responsivevoice.org/responsivevoice.js"></script>
 <script>
 
-//var a=['Au commencement était la Parole, et la Parole était avec Dieu, et la Parole était Dieu.', 'En archí ín o lógos, kaí o lógos ín prós tón theón, kaí theós ín o lógos.', 'Ἐν ἀρχῇ ἦν ὁ λόγος, καὶ ὁ λόγος ἦν πρὸς τὸν θεόν, καὶ θεὸς ἦν ὁ λόγος.'];
+//var a=['Au commencement Ã©tait la Parole, et la Parole Ã©tait avec Dieu, et la Parole Ã©tait Dieu.', 'En archÃ­ Ã­n o lÃ³gos, kaÃ­ o lÃ³gos Ã­n prÃ³s tÃ³n theÃ³n, kaÃ­ theÃ³s Ã­n o lÃ³gos.', 'á¼˜Î½ á¼€Ï�Ï‡á¿‡ á¼¦Î½ á½� Î»ÏŒÎ³Î¿Ï‚, ÎºÎ±á½¶ á½� Î»ÏŒÎ³Î¿Ï‚ á¼¦Î½ Ï€Ï�á½¸Ï‚ Ï„á½¸Î½ Î¸ÎµÏŒÎ½, ÎºÎ±á½¶ Î¸Îµá½¸Ï‚ á¼¦Î½ á½� Î»ÏŒÎ³Î¿Ï‚.'];
 
-//elements d'affichage et leur contrôle
+//elements d'affichage et leur contrÃ´le
+
+
 
 var fileInput = document.getElementById('fileInput'),
+
 fileDisplayArea = document.getElementById('upper'),
 fileControlArea = document.getElementById('ctrl0'),
 mainDisplayArea = document.getElementById('lower'),
@@ -191,14 +215,17 @@ pagesDisplayArea = document.getElementById('pC');
 
 var pageInput = '<input type=\"text\" id=\"pn\" style=\"font-size:20px;\" name=\"name\" required   size=\"4\">';
 
-var pageButton = '<button id=\"pnBtn\" style=\"font-size:22px;\" onclick=\"goToPage()\">▶</button>';
+var pageButton = '<button id=\"pnBtn\" style=\"font-size:22px;\" onclick=\"goToPage()\">â–¶</button>';
 
 //démarrage
 
 var text, lines, source, namba;
 //var vide=0, frags=0, nL=1, nP=1, slovar=[BI,IN,GR,SE], nS=2;
 var vide=0, frags=0, nL=1, nP=1, tableau=[SE,BI,IN,GR], nS=0, slovar=tableau[nS];
-var stir=true, blocs=false, views=true;
+//alert("tableau.length "+slovar.length);
+var stir=true, blocs=false, pairs=false, views=true;
+//langues pour la lecture
+var rus=true, ind=false, ita=false;
 
 function initDropDown(n){
 	var topL = document.getElementById('tokPles');
@@ -208,7 +235,6 @@ function initDropDown(n){
 }
 
 function parseDictionary(){
-	
 	text=[];
 	lines=[];
 	namba=0;
@@ -219,8 +245,10 @@ function parseDictionary(){
 		{
 			var firstPos=dictionary.indexOf('\n');
 			var line=dictionary.slice(0,firstPos);
+			//alert(line);
 			lines.push(line);
 			text.push(makePhrase('Trois champignons',false));
+			//alert(text);
 			dictionary=dictionary.slice(firstPos+1);
 			j++;
 		}
@@ -228,7 +256,21 @@ function parseDictionary(){
 	makeText();
 }
 
+var score=document.getElementById("score");
+
 parseDictionary();
+
+//score
+function joue(){
+	if (ind)
+		responsiveVoice.speak(text[namba].trace, "Indonesian Female");
+	else if (rus)
+		responsiveVoice.speak(text[namba].trace, "French Female");
+	else if (ita)
+			responsiveVoice.speak(text[namba].trace, "Italian Female");
+	//alert(text[namba].trace)
+}
+
 
 //boutons radio
 
@@ -259,6 +301,21 @@ b1.addEventListener('change', function(e){
 		blocs=false;
 		}
 	});
+
+var p0=document.getElementById("p0");
+p0.addEventListener('change', function(e){
+	if (p0.checked){
+		pairs=true;
+		console.log("pairs");
+	}
+});
+
+var p1=document.getElementById("p1");
+p1.addEventListener('change', function(e){
+	if (p1.checked){
+		pairs=false;
+	}
+});
 	
 var v0=document.getElementById("v0");
 v0.addEventListener('change', function(e){
@@ -273,8 +330,38 @@ v1.addEventListener('change', function(e){
 		views=false;
 		}
 	});
-	
-//listes déroulantes
+
+var l0=document.getElementById("l0");
+l0.addEventListener('change', function(e){
+	if (l0.checked){
+		console.log("Russe");
+		ind=false;
+		rus=true;
+		ita=false;
+		}
+	});
+
+var l1=document.getElementById("l1");
+l1.addEventListener('change', function(e){
+	if (l1.checked){
+		console.log("Indonésien");
+		ind=true;
+		rus=false;
+		ita=false;
+		}
+	});
+
+var l2=document.getElementById("l2");
+l2.addEventListener('change', function(e){
+	if (l2.checked){
+		console.log("Italien");
+		ind=false;
+		rus=false;
+		ita=true;
+		}
+	});
+
+//listes dÃ©roulantes
 //var vide=0, frags=0, nL=1, nP=1;
 
 var proportion = document.getElementById("vide");
@@ -314,7 +401,7 @@ updatePhP = function() {
 var nText = document.getElementById("phT");
 updatePhT = function() {
     nT = nText.value;
-    if (nT=='Indonésien (bilingue)')
+    if (nT=='IndonÃ©sien (bilingue)')
     	{
     		nS=2;
     		slovar=tableau[nS];
@@ -471,7 +558,7 @@ function countLines(){
 	compte=result.split('1').length-1;
 }
 
-//gestion de l'affichage inférieur
+//gestion de l'affichage infÃ©rieur
 
 var un, deux, current;
 
@@ -539,7 +626,7 @@ function expand(n)
 {
 	current.display.innerHTML=current.toHTML(n);
 		
-	//contrôle de la fenêtre nouvellement ouverte
+	//contrÃ´le de la fenÃªtre nouvellement ouverte
 	var pt=document.getElementById('inpoot');
 	
 	pt.focus();
@@ -566,8 +653,19 @@ function psefisato(n)
 		mainDisplayArea.innerHTML=current.toHTML(-1);
 }
 
-function layOut(nupela,snake,bottom){ //affiche le haut et le bas à partir de "source", réinitialise la phrase si elle est vide, initialise le serpent s'il n'y en a pas.
-	var a=source[namba], phrase=a[0];
+function layOut(nupela,snake,bottom){ //affiche le haut et le bas Ã  partir de "source", rÃ©initialise la phrase si elle est vide, initialise le serpent s'il n'y en a pas.
+const now = new Date();
+
+// Extraire l'heure, les minutes et les secondes
+const hours = now.getHours();
+const minutes = now.getMinutes();
+const seconds = now.getSeconds();
+var secs = 3600*hours+ 60*minutes + seconds;
+
+// Formater l'heure dans un format lisible
+const timeString = `${hours}h ${minutes}m ${seconds}s`;
+
+var a=source[namba], phrase=a[0];
 	current=text[namba]; //scope !
 	pagesDisplayArea.innerHTML='Page '+(namba+1)+'/'+source.length;
 	
@@ -578,6 +676,7 @@ function layOut(nupela,snake,bottom){ //affiche le haut et le bas à partir de "
 		current.snake.init();
 		//alert(current.toText());
 		text[namba]=current;
+		//score.innerHTML="Score: ";
 	}
 	
 	else if (snake)
@@ -585,7 +684,7 @@ function layOut(nupela,snake,bottom){ //affiche le haut et le bas à partir de "
 	
 	//current.upDate();
 	if (bottom)
-		mainDisplayArea.innerHTML=current.toHTML(-1); //phrase à reconstituer
+		mainDisplayArea.innerHTML=current.toHTML(-1); //phrase Ã  reconstituer
 	
 	sentence=current.toText();
 	
@@ -618,6 +717,8 @@ function layOut(nupela,snake,bottom){ //affiche le haut et le bas à partir de "
 	else
 	
 		fileDisplayArea.innerHTML=sentence; //phrases de référence
+
+	//score.innerHTML += current.delta().toLocaleString('fr') + ": " + secs + "<br>";
 }
 
 function makePhrase(phrase,save) //constructeur simplifié
@@ -628,9 +729,9 @@ function makePhrase(phrase,save) //constructeur simplifié
 
 function brasse(n){
 	if (n!=0)
-		namba=(source.length+namba+n)%source.length;
+		namba = (source.length + namba + n)%source.length;
 	else
-		namba=Math.floor(Math.random()*source.length);
+		namba = Math.floor(Math.random() * source.length);
 			
 	layOut(false,false,true);
 }
@@ -681,7 +782,7 @@ function makeText(){ //crée "source" avec des mots vides
 	var j=nL;
 	while (j<n){
 	
-		if (j%(nL*nP)==0) //début de ligne
+		if (j%(nL*nP)==0) //dÃ©but de ligne
 		{
 			source.push(column);
 			text.push(makePhrase('Trois champignons',false));
